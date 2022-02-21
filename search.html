@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+          #container{
+            border: 2px solid black;     
+            display: flex;     
+        }
+        #sidebar{
+            border: 2px solid black;    
+            padding: 10px; 
+            margin: 10px;
+        }
+        #main{
+            border: 2px solid black ;  
+        }
+        h1,h4{
+            border: 2px solid black;     
+            cursor: pointer ;    
+        }
+        img{
+            width: 30%;
+        }
+        #news{
+            display: flex; 
+            padding: 15px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="sidebar">
+            <!--<h4> Login </h4> -->
+            <!-- <input type="text" id="search" placeholder="Search News">  -->
+           
+        </div>
+        <div id="main">
+        </div>
+</body>
+</html>
+
+<script type="module">
+    
+    import navbar from "./components/navbar.js" ;
+    console.log(navbar);  
+     let sidebar = document.getElementById("sidebar");
+     sidebar.innerHTML = navbar ;
+     
+     var search = localStorage.getItem("search_term"); 
+    //  console.log(search);
+    fun()
+
+     async function fun(){
+        try{
+            let res = await fetch(`https://shrouded-earth-23381.herokuapp.com/api/search/?q=${search}`) ; 
+
+            let data = await res.json(); 
+            console.log(data)
+            page(data); 
+        }
+        catch (err){
+            console.log("err",err);  
+        }
+    }
+
+        function page(data){
+        data.forEach(e => {
+                
+            let d1 = document.createElement("div");  
+
+            let p1 = document.createElement("h4"); 
+            p1.textContent = e.title ; 
+
+            let p2 =document.createElement("h4"); 
+            p2.textContent = e.description  ; 
+
+            let img = document.createElement("img"); 
+            img.src = e.urlToImage ; 
+
+            d1.append(p1,p2);
+            document.querySelector("#main").append(img,d1) ;
+            });
+        }
+
+</script>
